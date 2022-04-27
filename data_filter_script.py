@@ -91,69 +91,69 @@ def write_csv_no_name(arr, path):
 
 if __name__ == '__main__':
     dict, arr, all = read_data("titanic.txt");
-    print(len(all))
-    print(len(arr))
-    write_csv(arr, 'age_known_titatic.csv')
+    # print(len(all))
+    # print(len(arr))
+    # write_csv(arr, 'age_known_titatic.csv')
     # for entry in all:
     #     print(entry)
     # print('\n\n\n\nARR\n\n\n\n', arr)
-    # df = pd.DataFrame(dict)
-    # df[['Age', 'PClass', 'Survived', 'Sex']] = df[['Age', 'PClass', 'Survived', 'Sex']].apply(pd.to_numeric)
-    # print(df)
-    # X = df[['Age', 'PClass', 'Sex']]
-    # y = df.Survived
-    #
-    # import sklearn
-    # from sklearn.model_selection import train_test_split
-    # X_train,X_test,y_train,y_test=train_test_split(X,y,test_size=0.25,random_state=0)
-    # print('X_TRAIN',X_train)
-    # print('Y_TRAIN', y_train)
-    #
-    # # import the class
-    # from sklearn.linear_model import LogisticRegression
-    #
-    # # instantiate the model (using the default parameters)
-    # logreg = LogisticRegression()
-    # # logreg = LogisticRegressionCV(cv=10, scoring='roc_auc', n_jobs=-1)
-    #
-    # # fit the model with data (training)
-    # logreg.fit(X_train,y_train)
-    #
-    # print('equation:', logreg.intercept_, logreg.coef_)
-    # print('classes', logreg.feature_names_in_)
-    #
-    # y_pred=logreg.predict(X_test)
-    #
-    # from sklearn import metrics
-    # cnf_matrix = metrics.confusion_matrix(y_test, y_pred)
-    # cnf_matrix
-    #
-    # # import required modules
-    # import numpy as np
-    # import matplotlib.pyplot as plt
-    # import seaborn as sns
-    # # %matplotlib inline
-    # class_names=[0,1] # name  of classes
-    # fig, ax = plt.subplots()
-    # tick_marks = np.arange(len(class_names))
-    # plt.xticks(tick_marks, class_names)
-    # plt.yticks(tick_marks, class_names)
-    # # create heatmap
-    # sns.heatmap(pd.DataFrame(cnf_matrix), annot=True, cmap="YlGnBu" ,fmt='g')
-    # ax.xaxis.set_label_position("top")
-    # plt.tight_layout()
-    # plt.title('Confusion matrix', y=1.1)
-    # plt.ylabel('Actual label')
-    # plt.xlabel('Predicted label')
-    # plt.show()
-    #
-    # print("Accuracy:",metrics.accuracy_score(y_test, y_pred))
-    # print("Precision:",metrics.precision_score(y_test, y_pred))
-    # print("Recall:",metrics.recall_score(y_test, y_pred))
-    #
-    # y_pred_proba = logreg.predict_proba(X_test)[::,1]
-    # fpr, tpr, _ = metrics.roc_curve(y_test,  y_pred_proba)
-    # auc = metrics.roc_auc_score(y_test, y_pred_proba)
-    # plt.plot(fpr,tpr,label="data 1, auc="+str(auc))
-    # plt.legend(loc=4)
-    # plt.show()
+    df = pd.DataFrame(dict)
+    df[['Age', 'PClass', 'Survived', 'Sex']] = df[['Age', 'PClass', 'Survived', 'Sex']].apply(pd.to_numeric)
+    print(df)
+    X = df[['Age', 'PClass', 'Sex']]
+    y = df.Survived
+
+    import sklearn
+    from sklearn.model_selection import train_test_split
+    X_train,X_test,y_train,y_test=train_test_split(X,y,test_size=0.25,random_state=0)
+    print('X_TRAIN',X_train)
+    print('Y_TRAIN', y_train)
+
+    # import the class
+    from sklearn.linear_model import LogisticRegression
+
+    # instantiate the model (using the default parameters)
+    logreg = LogisticRegression()
+    # logreg = LogisticRegressionCV(cv=10, scoring='roc_auc', n_jobs=-1)
+
+    # fit the model with data (training)
+    logreg.fit(X_train,y_train)
+
+    print('equation:', logreg.intercept_, logreg.coef_)
+    print('classes', logreg.feature_names_in_)
+
+    y_pred=logreg.predict(X_test)
+
+    from sklearn import metrics
+    cnf_matrix = metrics.confusion_matrix(y_test, y_pred)
+    cnf_matrix
+
+    # import required modules
+    import numpy as np
+    import matplotlib.pyplot as plt
+    import seaborn as sns
+    # %matplotlib inline
+    class_names=[0,1] # name  of classes
+    fig, ax = plt.subplots()
+    tick_marks = np.arange(len(class_names))
+    plt.xticks(tick_marks, class_names)
+    plt.yticks(tick_marks, class_names)
+    # create heatmap
+    sns.heatmap(pd.DataFrame(cnf_matrix), annot=True, cmap="YlGnBu" ,fmt='g')
+    ax.xaxis.set_label_position("top")
+    plt.tight_layout()
+    plt.title('Confusion matrix', y=1.1)
+    plt.ylabel('Actual label')
+    plt.xlabel('Predicted label')
+    plt.show()
+
+    print("Accuracy:",metrics.accuracy_score(y_test, y_pred))
+    print("Precision:",metrics.precision_score(y_test, y_pred))
+    print("Recall:",metrics.recall_score(y_test, y_pred))
+
+    y_pred_proba = logreg.predict_proba(X_test)[::,1]
+    fpr, tpr, _ = metrics.roc_curve(y_test,  y_pred_proba)
+    auc = metrics.roc_auc_score(y_test, y_pred_proba)
+    plt.plot(fpr,tpr,label="data 1, auc="+str(auc))
+    plt.legend(loc=4)
+    plt.show()
