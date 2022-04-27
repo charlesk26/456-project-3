@@ -21,7 +21,7 @@ library(arm)
 ```
 #Load and glimpse data
 ```{r}
-df <- read.csv("~/Documents/Collegiate/Spring_2022/MATH_456/essays/project_2/R-env/project-2/proj-3-data/age_known_titatic.csv")
+df <- read.csv("~/Documents/Collegiate/Spring_2022/MATH_456/essays/project_3/project-3-files/age_known_titatic.csv")
 glimpse(df)
 ```
 #Check Distribution of Continuous Variables
@@ -65,8 +65,10 @@ test <- df[-train_ind, ]
 #Build Model
 ```{r}
 model_with_age <- glm(Survived ~ Age + PClass + Sex, data = train, family = 'binomial')
-model_without_age <- glm(Survived ~ PClass + Sex, data = train, family = 'binomial')
 ```
+
+<!-- model_without_age <- glm(Survived ~ PClass + Sex, data = train, family = 'binomial') -->
+<!-- ``` -->
 #Outcome of prediction
 ```{r}
 predicted.data <- data.frame(
@@ -87,11 +89,11 @@ ggplot(data = predicted.data, aes(x = rank, y=probability.of.Survived))+
 summary(model_with_age)
 plot(model_with_age)
 ```
-#Model Summary without age
-```{r}
-summary(model_without_age)
-plot(model_without_age)
-```
+<!-- #Model Summary without age -->
+<!-- ```{r} -->
+<!-- summary(model_without_age) -->
+<!-- plot(model_without_age) -->
+<!-- ``` -->
 #Binned residual plot for model with age
 ```{r}
 #Majority of data points fall within standard error bands
@@ -105,30 +107,30 @@ binnedplot(fitted(model_with_age),
            col.pts = 1, 
            col.int = "gray")
 ```
-#Binnedplot for model without age
-```{r}
-#Majority of data points fall within standard error bands
-binnedplot(fitted(model_without_age), 
-           residuals(model_without_age, type = "response"), 
-           nclass = NULL, 
-           xlab = "Expected Values", 
-           ylab = "Average residual", 
-           main = "Binned residual plot", 
-           cex.pts = 0.8, 
-           col.pts = 1, 
-           col.int = "gray")
-```
-#Pseudo R^2
-```{r}
-ll.null <- model_with_age$null.deviance/-2
-ll.proposed <- model_with_age$deviance/-2
-(ll.null - ll.proposed) / ll.null
-```
-#P-value of R^2
-```{r}
-1-pchisq(2*(ll.proposed - ll.null), df = (length(model_with_age$coefficients)-1))
-#so we know our R^2 is accurate
-```
+<!-- #Binnedplot for model without age -->
+<!-- ```{r} -->
+<!-- #Majority of data points fall within standard error bands -->
+<!-- binnedplot(fitted(model_without_age),  -->
+<!--            residuals(model_without_age, type = "response"),  -->
+<!--            nclass = NULL,  -->
+<!--            xlab = "Expected Values",  -->
+<!--            ylab = "Average residual",  -->
+<!--            main = "Binned residual plot",  -->
+<!--            cex.pts = 0.8,  -->
+<!--            col.pts = 1,  -->
+<!--            col.int = "gray") -->
+<!-- ``` -->
+<!-- #Pseudo R^2 -->
+<!-- ```{r} -->
+<!-- ll.null <- model_with_age$null.deviance/-2 -->
+<!-- ll.proposed <- model_with_age$deviance/-2 -->
+<!-- (ll.null - ll.proposed) / ll.null -->
+<!-- ``` -->
+<!-- #P-value of R^2 -->
+<!-- ```{r} -->
+<!-- 1-pchisq(2*(ll.proposed - ll.null), df = (length(model_with_age$coefficients)-1)) -->
+<!-- #so we know our R^2 is accurate -->
+<!-- ``` -->
 #Plotting Confusion Matrices
 ```{r}
 predict.1 <- predict(model_with_age, test, type = 'response')
@@ -140,24 +142,26 @@ f.1 <- tibble("target" = test$Survived,
 f.1_table <- table(f.1)
 cfm.1 <- as_tibble(f.1_table)
 plot_confusion_matrix(cfm.1, target_col = "target", prediction_col = "prediction", counts_col = "n")
-
-predict.2 <- predict(model_without_age, test, type = 'response')
-#simple table
-table_mat.2 <- table(test$Survived, predict.2 > 0.5)
-# confusion matrix
-f.2 <- tibble("target" = test$Survived,
-            "prediction" = ifelse(predict.2 > 0.5, 1, 0))
-f.2_table <- table(f.2)
-cfm.2 <- as_tibble(f.2_table)
-plot_confusion_matrix(cfm.2, target_col = "target", prediction_col = "prediction", counts_col = "n")
 ```
+
+<!-- # predict.2 <- predict(model_without_age, test, type = 'response') -->
+<!-- # #simple table -->
+<!-- # table_mat.2 <- table(test$Survived, predict.2 > 0.5) -->
+<!-- # # confusion matrix -->
+<!-- # f.2 <- tibble("target" = test$Survived, -->
+<!-- #             "prediction" = ifelse(predict.2 > 0.5, 1, 0)) -->
+<!-- # f.2_table <- table(f.2) -->
+<!-- # cfm.2 <- as_tibble(f.2_table) -->
+<!-- # plot_confusion_matrix(cfm.2, target_col = "target", prediction_col = "prediction", counts_col = "n") -->
+<!-- ``` -->
 #Accuracy Test
 ```{r}
 accuracy_Test.1 <- sum(diag(table_mat.1)) / sum(table_mat.1)
 accuracy_Test.1
-accuracy_Test.2 <- sum(diag(table_mat.2)) / sum(table_mat.2)
-accuracy_Test.2
 ```
+<!-- # accuracy_Test.2 <- sum(diag(table_mat.2)) / sum(table_mat.2) -->
+<!-- # accuracy_Test.2 -->
+<!-- ``` -->
 
 #Precision Vs Recall
 ```{r}
@@ -176,20 +180,22 @@ recall <- function(matrix) {
 }
 prec.1 <- precision(table_mat.1)
 prec.1
-prec.2 <- precision(table_mat.2)
-prec.2
 rec.1 <- recall(table_mat.1)
 rec.1
-rec.2 <- recall(table_mat.2)
-rec.2
 ```
-#Harmonic Mean of precision and recall
+<!-- # rec.2 <- recall(table_mat.2) -->
+<!-- # rec.2 -->
+<!-- # prec.2 <- precision(table_mat.2) -->
+<!-- # prec.2 -->
+<!-- #Harmonic Mean of precision and recall -->
 ```{r}
 f1 <- 2 * ((prec.1 * rec.1) / (prec.1 + rec.1))
 f1
-f1.other <- 2 * ((prec.2 * rec.2) / (prec.2 + rec.2))
-f1.other
 ```
+<!-- # ```{r} -->
+<!-- # f1.other <- 2 * ((prec.2 * rec.2) / (prec.2 + rec.2)) -->
+<!-- # f1.other -->
+<!-- # ``` -->
 #The ROC curve
 ```{r}
 library(ROCR)
